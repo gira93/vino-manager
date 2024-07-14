@@ -1,8 +1,6 @@
 # Vino Manager
 
-## or just "vino"
-
-> from the Italian word "vino", literally "wine"
+> or just "vino", from the Italian word "vino", literally "wine"
 
 A Bash dmenu based script for managing wine prefixes and quickly launch apps
 
