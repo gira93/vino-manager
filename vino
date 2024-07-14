@@ -25,19 +25,19 @@ export WINEPREFIX=""
 export WINEARCH=win64
 SELECTED_PREFIX=""
 BASE_DIR="$HOME/vino"
-mkdir -p $BASE_DIR
-cd $BASE_DIR
+mkdir -p "$BASE_DIR"
+cd "$BASE_DIR"
 
 # Functions
 # $1 -- prefix name
 create_prefix() {
-	mkdir -p $1
+	mkdir -p "$1"
 }
 
 # $1 -- prefix folder name
 set_prefix() {
 	SELECTED_PREFIX=$1
-	WINEPREFIX=$BASE_DIR/$1
+	WINEPREFIX="$BASE_DIR/$1"
 	if [ -z "$(ls -A $WINEPREFIX)" ]; then
 		winecfg
 	fi
@@ -47,10 +47,10 @@ set_prefix() {
 create_runner() {
 	exe=$(program_selection)
 	if [[ $exe != "" ]]; then
-		cd $WINEPREFIX
+		cd "$WINEPREFIX"
 		cat <<EOF >run.sh
 #!/usr/bin/env bash
-WINEPREFIX=$WINEPREFIX wine $exe
+WINEPREFIX="$WINEPREFIX" wine "$exe"
 EOF
 		chmod +x run.sh
 	fi
@@ -70,7 +70,7 @@ config_prefix() {
 		"Run EXE")
 			exe=$(program_selection)
 			if [[ $exe != "" ]]; then
-				wine $exe
+				wine "$exe"
 			fi
 			;;
 		"Create Runner")
@@ -88,7 +88,7 @@ config_prefix() {
 delete_prefix() {
 	sure=$(echo -e "No\nYes" | dmenu -p "Delete $1?")
 	if [[ $sure = "Yes" ]]; then
-		rm -r $BASE_DIR/$1
+		rm -r "$BASE_DIR/$1"
 		main
 	else
 		main
@@ -96,7 +96,7 @@ delete_prefix() {
 }
 
 program_selection() {
-	cd $BASE_DIR
+	cd "$BASE_DIR"
 	current=""
 	while true; do
 		list=$(ls)
@@ -118,26 +118,26 @@ main() {
 	selection=$(echo -e "[Cancel]\nLaunch app\nConfig a prefix\nCreate a prefix\nDelete a prefix" | dmenu -l 5 -p "What do you want to do?")
 	case "$selection" in
 	"Launch app")
-		cd $BASE_DIR
+		cd "$BASE_DIR"
 		prefix=$(ls | dmenu -l 10 -p "Select a prefix")
 		set_prefix $prefix
-		bash $WINEPREFIX/run.sh
+		bash "$WINEPREFIX/run.sh"
 		;;
 	"Config a prefix")
-		cd $BASE_DIR
+		cd "$BASE_DIR"
 		set_prefix $(ls | dmenu -l 10 -p "Select a prefix")
 		config_prefix
 		main
 		;;
 	"Create a prefix")
-		cd $BASE_DIR
+		cd "$BASE_DIR"
 		name=$(echo "" | dmenu -p "Type a name for the prefix")
 		create_prefix $name
 		set_prefix $name
 		config_prefix
 		;;
 	"Delete a prefix")
-		cd $BASE_DIR
+		cd "$BASE_DIR"
 		delete_prefix $(ls | dmenu -l 10 -p "Prefix to delete")
 		;;
 	*)
