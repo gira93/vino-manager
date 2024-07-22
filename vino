@@ -63,7 +63,7 @@ EOF
 # Config prefix
 config_prefix() {
 	while true; do
-		selection=$(echo -e "[Cancel]\nWinecfg\nWinetricks\nRun EXE\nCreate Runner" | dmenu -l 5 -p "Config for $SELECTED_PREFIX")
+		selection=$(echo -e "[Cancel]\nWinecfg\nWinetricks\nRun EXE\nExplorer\nCreate Runner" | dmenu -l 6 -p "Config for $SELECTED_PREFIX")
 		case "$selection" in
 		"Winecfg")
 			winecfg
@@ -77,6 +77,9 @@ config_prefix() {
 			if [[ $exe != "" ]]; then
 				wine "$exe"
 			fi
+			;;
+		"Explorer")
+			winefile
 			;;
 		"Create Runner")
 			create_runner
